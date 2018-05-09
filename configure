@@ -14186,7 +14186,7 @@ $as_echo "darwin" >&6; }
 	OS_SYSTEM=darwin
 
 	;;
-    *linux*)
+    *linux* | *Linux*)
 	#AC_DEFINE(OS_LINUX,1)
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: linux" >&5
 $as_echo "linux" >&6; }

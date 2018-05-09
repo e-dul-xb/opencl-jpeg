@@ -40,6 +40,8 @@
 #endif
 
 
+#define BMP_SUPPORTED
+
 /* Create the add-on message string table. */
 
 #define JMESSAGE(code,string)	string ,
@@ -68,7 +70,7 @@ typedef enum {
 } IMAGE_FORMATS;
 
 #ifndef DEFAULT_FMT		/* so can override from CFLAGS in Makefile */
-#define DEFAULT_FMT	FMT_PPM
+#define DEFAULT_FMT	FMT_BMP
 #endif
 
 static IMAGE_FORMATS requested_fmt;
@@ -196,7 +198,6 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
     if (keymatch(arg, "bmp", 1)) {
       /* BMP output format. */
       requested_fmt = FMT_BMP;
-
     } else if (keymatch(arg, "colors", 1) || keymatch(arg, "colours", 1) ||
 	       keymatch(arg, "quantize", 1) || keymatch(arg, "quantise", 1)) {
       /* Do color quantization. */

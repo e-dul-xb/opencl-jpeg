@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "jpeglib.h"
 cl_int create_with_file_name(ocl_pub_env_struct* env, cl_program* prog, const char* file_name)
 {
