@@ -1,3 +1,4 @@
+#pragma OPENCL EXTENSION cl_khr_fp64: enable
 /*
  * decode_idct.cl
  * author: xiaoE
@@ -1052,7 +1053,7 @@ __kernel void idct8x8_aan(__global struct QuantiTable* quant_table,
 
     __local DCT_FLOAT q_table[DCTSIZE2];
     event_t e;
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     float tmp = (float)(GblockIndex) / (float)blks_in_row;
     rowIndex = floor(tmp);
@@ -1112,7 +1113,7 @@ __kernel void idct16x16_aan(__global struct QuantiTable * quant_table,
     __local int q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->idct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     float tmp = (float)(GblockIndex) / (float)blks_in_row;
     rowIndex = floor(tmp);
@@ -1175,7 +1176,7 @@ __kernel void idct16x8_aan(__global struct QuantiTable * quant_table,
     __local int q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->idct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     float tmp = (float)(GblockIndex) / (float)blks_in_row;
     rowIndex = floor(tmp);
@@ -1232,7 +1233,7 @@ __kernel void idct8x16_aan(__global struct QuantiTable * quant_table,
     __local int q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->idct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     float tmp = (float)(GblockIndex) / (float)blks_in_row;
     rowIndex = floor(tmp);

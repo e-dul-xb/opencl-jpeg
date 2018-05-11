@@ -40,24 +40,24 @@ cl_int create_with_file_name(ocl_pub_env_struct* env, cl_program* prog, const ch
     CHECK_OCL_ERROR(error_code,"Create Program fail");
     if(error_code == CL_SUCCESS)
     {
-	    error_code = clBuildProgram(*prog,1,&env->device_id,NULL,NULL,NULL);
+        printf("dev %lu \n", env->device_id);
+        printf("plat %lu \n", env->platform_id);
+        error_code = clBuildProgram(*prog,0,NULL,NULL,NULL,NULL);
     }
     if(error_code != CL_SUCCESS){
-	    /*
-	    // Determine the size of the log
-	    size_t log_size;
-	    clGetProgramBuildInfo(*prog, &env->device_id, 
-		CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+            // Determine the size of the log
+            size_t log_size;
+            clGetProgramBuildInfo(*prog, &env->device_id,
+                CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
 
-	    // Allocate memory for the log
-	    char *log = (char *) malloc(log_size);
+            // Allocate memory for the log
+            char *log = (char *) malloc(log_size);
 
-	    // Get the log
-	    clGetProgramBuildInfo(*prog, &env->device_id, 
-		CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
+            // Get the log
+            clGetProgramBuildInfo(*prog, &env->device_id,
+                CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
 
 	    // Print the log
-	    */
 	    printf("what's the fuck: %s err:%d\n",file_name, error_code);
     }
     return error_code;
@@ -108,6 +108,63 @@ cl_int ocl_mem_init(ocl_mem* cl_mem_member, ocl_pub_env_struct* pub_env)
 
 void ocl_pub_env_init(ocl_pub_env_struct* env)
 {
+  //ED
+  cl_platform_id plat;
+cl_device_id dev;
+  {
+  uint MAX_NAME_LEN = 128;
+  // get number of platforms
+  cl_uint plat_count;
+  clGetPlatformIDs(0, NULL, &plat_count);
+
+  // allocate memory, get list of platforms
+  cl_platform_id *platforms =
+    (cl_platform_id *) malloc(plat_count*sizeof(cl_platform_id));
+  
+  clGetPlatformIDs(plat_count, platforms, NULL);
+
+  // iterate over platforms
+  for (cl_uint i = 0; i < plat_count; ++i)
+  {
+    // get platform vendor name
+    char buf[MAX_NAME_LEN];
+    clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR,
+          sizeof(buf), buf, NULL);
+    printf("platform %d: vendor '%s'\n", i, buf);
+
+    // get number of devices in platform
+    cl_uint dev_count;
+    clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL,
+          0, NULL, &dev_count);
+
+    cl_device_id *devices =
+      (cl_device_id *) malloc(dev_count*sizeof(cl_device_id));
+    
+    // get list of devices in platform
+    clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL,
+          dev_count, devices, NULL);
+
+    // iterate over devices
+    for (cl_uint j = 0; j < dev_count; ++j)
+    {
+      char buf[MAX_NAME_LEN];
+      clGetDeviceInfo(devices[j], CL_DEVICE_NAME,
+            sizeof(buf), buf, NULL);
+      printf("  device %d: '%s'\n", j, buf);
+      printf("dev %lu \n", devices[j]);
+      dev = devices[j];
+      printf("plat %lu \n", platforms[i]);
+      plat = platforms[i];
+    }
+
+    free(devices);
+  }
+
+  free(platforms); 
+ }
+
+
+    printf("#INIT ENV!!!!!!!!!!!.\n");
     cl_int error_code;
     cl_uint num_devices;
     /* Create platform*/
@@ -133,8 +190,10 @@ void ocl_pub_env_init(ocl_pub_env_struct* env)
         perror("Couldn't find GPU devices\n");
     }
 #endif
+cl_context_properties cps[3] = {
+              CL_CONTEXT_PLATFORM, (cl_context_properties) plat, 0 };
     /* Create context */
-    env->context = clCreateContext(NULL,1,&env->device_id,NULL,NULL,&error_code);
+    env->context = clCreateContext(cps,1,&dev,NULL,NULL,&error_code);
     if(error_code != CL_SUCCESS)
     {
         perror("Couldn't Create context\n");

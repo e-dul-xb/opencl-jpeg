@@ -24,7 +24,7 @@
 #define OCL_RESIZE
 #define OCL_PRE_LOAD
 //#define OCL_PROFILE
-//#define OCL_PRINT_TIME
+#define OCL_PRINT_TIME
 #define IDCT_CLC "./decode_idct.cl"
 #define FDCT_CLC "./encode_dct.cl"
 #define RESIZE_CLC "./bilinear_resize.cl"

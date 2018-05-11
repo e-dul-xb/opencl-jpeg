@@ -1,3 +1,4 @@
+#pragma OPENCL EXTENSION cl_khr_fp64: enable
 /*
  * encode_idct.cl
  * author: xiaoE
@@ -781,7 +782,7 @@ __kernel void fdct16x16_aan(__global struct QuantiTable* quant_table,
     __local DCT_INT q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->fdct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     /* Load the 16x16 input blocks to local input_buffer 
        each work_item get 2 line of sample, each line has 16 samples;
@@ -851,7 +852,7 @@ __kernel void fdct8x8_aan(__global struct QuantiTable* quant_table,
     __local DCT_FLOAT q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->fdct_table_f[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     /* Load the input sample that has been padded to 8x8 block in resize_kernel to Local buffer*/
     int rowIndex, blk_infront;
@@ -913,7 +914,7 @@ __kernel void fdct16x8_aan(__global struct QuantiTable* quant_table,
     __local DCT_INT q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->fdct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     /* Load the 16x8 input blocks to local input_buffer 
        each work_item get 1 line of sample, each line has 16 samples;
@@ -980,7 +981,7 @@ __kernel void fdct8x16_aan(__global struct QuantiTable* quant_table,
     __local DCT_INT q_table[DCTSIZE2];
     event_t e;
     q_tbl_ptr = quant_table->fdct_table_i[ci];
-    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, (event_t)0);
+    e = async_work_group_copy(q_table, q_tbl_ptr, DCTSIZE2, NULL);
 
     /* Load the 8x16 input blocks to local input_buffer 
        each work_item get 2 line of sample, each line has 8 samples;

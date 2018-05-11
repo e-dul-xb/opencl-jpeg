@@ -32,6 +32,7 @@ jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize)
 {
   int i;
 #ifdef OPENCL_SUPPORTED
+  printf(stderr, "GPU");
   cinfo->use_gpu = 0;
 #endif
   /* Guard against version mismatches between library and caller. */

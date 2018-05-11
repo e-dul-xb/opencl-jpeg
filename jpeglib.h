@@ -989,7 +989,7 @@ typedef enum {
 #define CHECK_OCL_ERROR(error_code, str) \
     {\
         if(error_code != CL_SUCCESS)\
-        {\    
+        {\
             FILE *fp = NULL;\
             char err_str[128];\
             fp = fopen(Error_file,"a");\
